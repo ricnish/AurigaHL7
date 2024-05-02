@@ -196,7 +196,7 @@ int main( int argc, char* argv[] )
           adr.getMSH_1()->getMessageControlID()->setData( "token__110023" );
 
           // init MSA segment
-          adr.getMSA_2()->getMessageControlID()->setData( "token__110024" );
+          adr.getMSA_2()->getMessageControlID()->setData( "token__110022" );
           if ( bError )
           {
                // with error acknoledge code

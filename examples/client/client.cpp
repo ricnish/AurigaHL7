@@ -207,7 +207,7 @@ int main(int argc, char* argv[])
      }
      // print family name of requested user
      printf( "Correct answer received for %s user.\n", 
-          adr.getQUERY_RESPONSE( 0 )->getPID_17()->getPatientName()->getFamilyName()->getData() );
+          adr.getQUERY_RESPONSE( 0 )->getPID_17()->getPatientName()->getFamilyName()->getSurname()->getData() );
      return 0;
 }
 

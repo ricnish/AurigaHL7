@@ -270,13 +270,17 @@ void segToPipe(HL7Object * ptr, std::string& pipe) {
 			// Ignore empty object
 			if (obj == nullptr) {
 				// Check the rest elements
+				bool fcontinue = false;
 				for (size_t index = obj_index; index < p_stor->size(); ++index)
 					if (ptr->getObject(rep_index, index) != nullptr) {
 						// non-empty element has been found
 						pipe += delim; // add delimeter
+						fcontinue = true;
 						break; // and leave this circle
 					}
-				// the rest element are empty; leave the function
+				if(fcontinue)
+					continue;
+				// the rest element are empty; leave the loop
 				return;
 			}
 
@@ -326,12 +330,16 @@ void dataToPipe(HL7Object * ptr, std::string& pipe, Delimiter delim) {
 			// We found empty element in object list
 			if (obj == nullptr) {
 				// Check the rest elements
+				bool fcontinue = false;
 				for (size_t index = obj_index; index < p_stor->size(); ++index)
 					if (ptr->getObject(rep_index, index) != nullptr) {
 						pipe += delim.next();
+						fcontinue = true;
 						// the list has non-empty elements; leave this circle
 						break;
 					}
+				if(fcontinue)
+					continue;
 				return; // leave the function; the rest elements are empty
 			}
 

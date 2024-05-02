@@ -473,7 +473,7 @@ void test_03(DBGTest& dbg) {
 	_Message * msg = new _Message();
 	msg->initByDefault();
 	const std::string pipe_value =
-			"SEG|DE_VALUE\rSEG2|DE_VALUE_0^DE_VALUE_1|\rSEG3|^|\rSEG5|^|";
+			"SEG|DE_VALUE\rSEG2|DE_VALUE_0^DE_VALUE_1||DE_VALUE_2^DE_VALUE_3\rSEG3|^||^\rSEG5|^||^";
 
 	{ // Initialize message structure
 	  // Segment - initialized
