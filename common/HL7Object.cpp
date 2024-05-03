@@ -340,7 +340,7 @@ HL7Object& HL7Object::operator=(HL7Object& obj) {
 /******************************************************************************
  *
  *****************************************************************************/
-HL7Object * HL7Object::findObjectByClassName(const std::string& className) {
+HL7Object * HL7Object::findObjectByClassName(const std::string& className, size_t storId) {
 
 	bool is_storage_empty = this->m_storage.empty();
 
@@ -353,14 +353,14 @@ HL7Object * HL7Object::findObjectByClassName(const std::string& className) {
 		this->addNewStorage(); // Try to add storage;
 	}
 
-	HL7Storage * _stor = m_storage.at(0);
+	HL7Storage * _stor = m_storage.at(storId);
 	for (size_t i = 0; i < _stor->size(); ++i) {
 		bool is_nullptr_object = false;
-		HL7Object * _ptr = this->getObject(0, i);
+		HL7Object * _ptr = this->getObject(storId, i);
 
 		if (_ptr == nullptr) {
 			// Create and check object
-			_ptr = this->getObjectSafe(0, i);
+			_ptr = this->getObjectSafe(storId, i);
 			is_nullptr_object = true;
 		}
 
@@ -370,7 +370,29 @@ HL7Object * HL7Object::findObjectByClassName(const std::string& className) {
 
 		HL7Object * child = _ptr->findObjectByClassName(className);
 		if (child != nullptr) {
-			return child;
+			if(!_ptr->isRepetition() || child->isEmpty())
+				return child;
+
+			// If not empty, check if children are empty, if they are, return it
+			bool fEmpty = true;
+			for (size_t index = 0; index < child->size(); ++index)
+				if (child->getObject(0, index) != nullptr && !child->getObject(0, index)->isEmpty()) {
+					// non-empty element has been found
+					fEmpty = false;
+					break;
+				}
+
+			if(fEmpty)
+				return child;
+
+			if(_ptr->isRepetition())
+			{
+				// add the object in a new storage
+				_ptr->addNewStorage(); // add storage;
+				HL7Object* childNewStorage = _ptr->findObjectByClassName(className, _ptr->size() - 1);
+				if(childNewStorage != nullptr)
+					return childNewStorage;
+			}
 		}
 
 		if (is_nullptr_object) {

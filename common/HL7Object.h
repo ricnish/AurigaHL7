@@ -291,7 +291,7 @@ struct HL7Object {
 	 * The method iterates over the sub-object and searches object with
 	 * specified name.
 	 * *************************************************************************/
-	HL7Object * findObjectByClassName(const std::string&);
+	HL7Object * findObjectByClassName(const std::string&, size_t storId = 0);
 
 protected:
 	ObjectInfo m_info;                  // Information about current object
